@@ -9,7 +9,7 @@ class BimerException extends Exception
     /**
      * @var string|int|null
      */
-    protected $errorCode;
+    protected string|int|null $errorCode;
 
     /**
      * @param string|null $message
@@ -27,7 +27,7 @@ class BimerException extends Exception
     /**
      * @return int|string|null
      */
-    public function getErrorCode()
+    public function getErrorCode(): int|string|null
     {
         return $this->errorCode;
     }

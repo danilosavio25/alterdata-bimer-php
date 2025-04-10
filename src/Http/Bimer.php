@@ -34,67 +34,67 @@ class Bimer
     /**
      * @var string|null
      */
-    private static $apiUrl;
+    private static ?string $apiUrl = null;
 
     /**
      * @var string|null
      */
-    private static $username;
+    private static ?string $username = null;
 
     /**
      * @var string|null
      */
-    private static $password;
+    private static ?string $password = null;
 
     /**
      * @var string|null
      */
-    private static $clientId;
+    private static ?string $clientId = null;
 
     /**
      * @var string|null
      */
-    private static $clientSecret;
+    private static ?string $clientSecret = null;
 
     /**
      * The HTTP connection timeout
      *
      * @var int
      */
-    private static $timeout;
+    private static int $timeout = 30;
 
     /**
      * Default timeout in seconds
      *
      * @var int
      */
-    private static $defTimeout = 30;
+    private static int $defTimeout = 30;
 
     /**
      * Token duration in minutes
      *
      * @var int
      */
-    private static $tokenDuration = 10;
+    private static int $tokenDuration = 10;
 
     /**
      * The current token value
      *
      * @var string|null
      */
-    private static $token = null;
+    private static ?string $token = null;
 
     /**
      * @var string
      */
-    private static $sdkVersion = "1.2.1";
+    private static string $sdkVersion = "1.2.1";
 
     /**
      * The timestamp when token was generated
      *
      * @var int
      */
-    private static $tokenTimestamp = 0;
+    private static int $tokenTimestamp = 0;
 
     /**
      * @return string
@@ -114,7 +114,7 @@ class Bimer
     }
 
     /**
-     * @return string
+     * @return string|null
      * @throws BimerParameterException
      */
     public static function getUsername(): ?string
@@ -148,7 +148,7 @@ class Bimer
     }
 
     /**
-     * @return string
+     * @return string|null
      * @throws BimerParameterException
      */
     public static function getClientId(): ?string

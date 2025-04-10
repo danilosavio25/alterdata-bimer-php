@@ -3,11 +3,15 @@ declare(strict_types=1);
 
 namespace Bimer\Test;
 
+use Bimer\Exceptions\BimerParameterException;
 use PHPUnit\Framework\TestCase;
 use Bimer\Http\Bimer;
 
 final class BimerTest extends TestCase
 {
+    /**
+     * @throws BimerParameterException
+     */
     public function testSetBimerParameters()
     {
         $envValue = getenv(Bimer::BIMER_API_URL);

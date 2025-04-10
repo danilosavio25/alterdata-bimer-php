@@ -5,6 +5,7 @@ namespace Bimer\Http;
 use Bimer\Exceptions\BimerApiException;
 use Bimer\Exceptions\BimerParameterException;
 use Bimer\Exceptions\BimerRequestException;
+use GuzzleHttp\Exception\GuzzleException;
 
 abstract class Resource
 {
@@ -28,10 +29,11 @@ abstract class Resource
      * @param string $endpoint
      * @return mixed
      * @throws BimerApiException
-     * @throws BimerRequestException
      * @throws BimerParameterException
+     * @throws BimerRequestException
+     * @throws GuzzleException
      */
-    public static function all(array $params = [], string $endpoint = '')
+    public static function all(array $params = [], string $endpoint = ''): mixed
     {
         return static::get($endpoint, $params, false);
     }
@@ -42,10 +44,11 @@ abstract class Resource
      * @param $id
      * @return mixed
      * @throws BimerApiException
-     * @throws BimerRequestException
      * @throws BimerParameterException
+     * @throws BimerRequestException
+     * @throws GuzzleException
      */
-    public static function find($id)
+    public static function find($id): mixed
     {
         return static::get($id);
     }
@@ -58,10 +61,11 @@ abstract class Resource
      * @param bool $single
      * @return mixed
      * @throws BimerApiException
-     * @throws BimerRequestException
      * @throws BimerParameterException
+     * @throws BimerRequestException
+     * @throws GuzzleException
      */
-    public static function get(string $endpoint = '', array $params = [], bool $single = true)
+    public static function get(string $endpoint = '', array $params = [], bool $single = true): mixed
     {
         $data = static::api()->get($endpoint, ['query' => $params]);
 
@@ -75,10 +79,11 @@ abstract class Resource
      * @param array $params
      * @return mixed
      * @throws BimerApiException
-     * @throws BimerRequestException
      * @throws BimerParameterException
+     * @throws BimerRequestException
+     * @throws GuzzleException
      */
-    public static function save(array $params)
+    public static function save(array $params): mixed
     {
         if (!isset($params['Identificador'])) {
             return static::create($params);
@@ -94,10 +99,11 @@ abstract class Resource
      * @param string $endpoint
      * @return mixed
      * @throws BimerApiException
-     * @throws BimerRequestException
      * @throws BimerParameterException
+     * @throws BimerRequestException
+     * @throws GuzzleException
      */
-    public static function create(array $params, string $endpoint = '')
+    public static function create(array $params, string $endpoint = ''): mixed
     {
         $data = static::api()->post($endpoint, ['json' => $params]);
 
@@ -111,10 +117,11 @@ abstract class Resource
      * @param array $params
      * @return mixed
      * @throws BimerApiException
-     * @throws BimerRequestException
      * @throws BimerParameterException
+     * @throws BimerRequestException
+     * @throws GuzzleException
      */
-    public static function update(string $id, array $params)
+    public static function update(string $id, array $params): mixed
     {
         $data = static::api()->put($id, ['json' => $params]);
 
@@ -130,8 +137,9 @@ abstract class Resource
      * @throws BimerApiException
      * @throws BimerRequestException
      * @throws BimerParameterException
+     * @throws GuzzleException
      */
-    public static function delete(string $id, array $params = [])
+    public static function delete(string $id, array $params = []): mixed
     {
         $data = static::api()->delete($id, ['json' => $params]);
 
@@ -145,7 +153,7 @@ abstract class Resource
      * @param bool $single
      * @return mixed
      */
-    private static function normalizeData($response, bool $single = true)
+    private static function normalizeData(mixed $response, bool $single = true): mixed
     {
         $isArray = isset($response->ListaObjetos) && is_array($response->ListaObjetos);
 
@@ -153,5 +161,23 @@ abstract class Resource
         $item = reset($array) ? reset($array) : null;
 
         return $single ? $item : $array;
+    }
+
+    /**
+     * Create element
+     *
+     * @param array $params
+     * @param string $endpoint
+     * @return mixed
+     * @throws BimerApiException
+     * @throws BimerParameterException
+     * @throws BimerRequestException
+     * @throws GuzzleException
+     */
+    public static function patch(array $params, string $endpoint = ''): mixed
+    {
+        $data = static::api()->patch($endpoint, ['json' => $params]);
+
+        return static::normalizeData($data);
     }
 }

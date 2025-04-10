@@ -2,24 +2,26 @@
 
 namespace Bimer\Http;
 
-use Bimer\Exceptions\BimerParameterException;
-use GuzzleHttp\Exception\ConnectException;
-use Psr\Http\Message\ResponseInterface;
-use GuzzleHttp\Exception\RequestException;
-use Bimer\Exceptions\BimerRequestException;
 use Bimer\Exceptions\BimerApiException;
+use Bimer\Exceptions\BimerParameterException;
+use Bimer\Exceptions\BimerRequestException;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
+use Psr\Http\Message\ResponseInterface;
+use stdClass;
 
 class Api
 {
     /**
      * @var Client
      */
-    protected $client;
+    protected Client $client;
 
     /**
      * @var string
      */
-    protected $endpoint;
+    protected string $endpoint;
 
     /**
      * @param string $endpoint
@@ -34,6 +36,7 @@ class Api
      * @throws BimerRequestException
      * @throws BimerApiException
      * @throws BimerParameterException
+     * @throws GuzzleException
      */
     private function checkAuth(): void
     {
@@ -46,6 +49,7 @@ class Api
      * @throws BimerRequestException
      * @throws BimerApiException
      * @throws BimerParameterException
+     * @throws GuzzleException
      */
     private function auth(): void
     {
@@ -102,8 +106,9 @@ class Api
      * @throws BimerApiException
      * @throws BimerParameterException
      * @throws BimerRequestException
+     * @throws GuzzleException
      */
-    public function request(string $method, string $endpoint = '', array $options = [])
+    public function request(string $method, string $endpoint = '', array $options = []): mixed
     {
         if ($endpoint != '/oauth/token') {
             $this->checkAuth();
@@ -112,6 +117,9 @@ class Api
         }
 
         try {
+            echo '$endpoint';
+            echo $endpoint;
+            echo $method;
             $response = $this->client->request($method, $endpoint, $options);
         } catch (RequestException $e) {
             if (!$e->hasResponse()) {
@@ -132,7 +140,7 @@ class Api
      * @throws BimerApiException
      * @throws BimerRequestException
      */
-    public function response(ResponseInterface $response)
+    public function response(ResponseInterface $response): mixed
     {
         $content = $response->getBody()->getContents();
 
@@ -145,11 +153,11 @@ class Api
 
     /**
      * @param ResponseInterface $response
-     * @param \stdClass|null $data
+     * @param stdClass|null $data
      * @throws BimerApiException
      * @throws BimerRequestException
      */
-    private function checkForErrors(ResponseInterface $response, \stdClass $data = null): void
+    private function checkForErrors(ResponseInterface $response, stdClass $data = null): void
     {
         $code = $response->getStatusCode();
         $statusClass = (int)($code / 100);
@@ -173,14 +181,12 @@ class Api
         PUT/id (parameter error)    | 422 Unprocessable Entity  | -1
     */
     /**
-     * @param \stdClass|null $data
+     * @param stdClass|null $data
      * @throws BimerApiException
      */
-    private function checkForApiException(\stdClass $data = null): void
+    private function checkForApiException(stdClass $data = null): void
     {
-        $hasErrors = isset($data->Erros) &&
-            isset($data->Erros[0]) &&
-            isset($data->Erros[0]->ErrorMessage);
+        $hasErrors = isset($data->Erros[0]->ErrorMessage);
 
         if ($hasErrors) {
             $code = $data->Erros[0]->ErrorCode ?? null;
@@ -191,10 +197,10 @@ class Api
 
     /**
      * @param ResponseInterface $response
-     * @param \stdClass|null $data
+     * @param stdClass|null $data
      * @throws BimerRequestException
      */
-    private function checkForRequestException(ResponseInterface $response, \stdClass $data = null): void
+    private function checkForRequestException(ResponseInterface $response, stdClass $data = null): void
     {
         $code = $response->getStatusCode();
         $message = $data->error_description ?? $response->getReasonPhrase();
@@ -203,15 +209,12 @@ class Api
     }
 
     /**
-     * @param \stdClass|null $data
+     * @param stdClass|null $data
      * @return bool
      */
-    private function ignoreException(\stdClass $data = null): bool
+    private function ignoreException(stdClass $data = null): bool
     {
-        $isGetNotFound = isset($data->Erros) &&
-            isset($data->Erros[0]) &&
-            isset($data->Erros[0]->ErrorCode) &&
-            $data->Erros[0]->ErrorCode == 'C01';
+        $isGetNotFound = isset($data->Erros[0]->ErrorCode) && $data->Erros[0]->ErrorCode == 'C01';
 
         return $isGetNotFound;
     }
@@ -220,11 +223,12 @@ class Api
      * @param string $endpoint
      * @param array $options
      * @return mixed
-     * @throws BimerRequestException
      * @throws BimerApiException
      * @throws BimerParameterException
+     * @throws BimerRequestException
+     * @throws GuzzleException
      */
-    public function get(string $endpoint = '', array $options = [])
+    public function get(string $endpoint = '', array $options = []): mixed
     {
         return $this->request('GET', $endpoint, $options);
     }
@@ -233,11 +237,12 @@ class Api
      * @param string $endpoint
      * @param array $options
      * @return mixed
-     * @throws BimerRequestException
      * @throws BimerApiException
      * @throws BimerParameterException
+     * @throws BimerRequestException
+     * @throws GuzzleException
      */
-    public function post(string $endpoint = '', array $options = [])
+    public function post(string $endpoint = '', array $options = []): mixed
     {
         return $this->request('POST', $endpoint, $options);
     }
@@ -246,11 +251,12 @@ class Api
      * @param string $endpoint
      * @param array $options
      * @return mixed
-     * @throws BimerRequestException
      * @throws BimerApiException
      * @throws BimerParameterException
+     * @throws BimerRequestException
+     * @throws GuzzleException
      */
-    public function put(string $endpoint, array $options = [])
+    public function put(string $endpoint, array $options = []): mixed
     {
         return $this->request('PUT', $endpoint, $options);
     }
@@ -262,9 +268,24 @@ class Api
      * @throws BimerRequestException
      * @throws BimerApiException
      * @throws BimerParameterException
+     * @throws GuzzleException
      */
-    public function delete(string $endpoint, array $options = [])
+    public function delete(string $endpoint, array $options = []): mixed
     {
         return $this->request('PUT', $endpoint, $options);
+    }
+
+    /**
+     * @param string $endpoint
+     * @param array $options
+     * @return mixed
+     * @throws BimerApiException
+     * @throws BimerParameterException
+     * @throws BimerRequestException
+     * @throws GuzzleException
+     */
+    public function patch(string $endpoint = '', array $options = []): mixed
+    {
+        return $this->request('PATCH', $endpoint, $options);
     }
 }

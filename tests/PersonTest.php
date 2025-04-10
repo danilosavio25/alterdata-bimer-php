@@ -3,10 +3,13 @@ declare(strict_types=1);
 
 namespace Bimer\Test;
 
+use Bimer\Customer;
 use Bimer\Exceptions\BimerApiException;
 use Bimer\Exceptions\BimerParameterException;
 use Bimer\Exceptions\BimerRequestException;
 use Bimer\Person;
+use GuzzleHttp\Exception\GuzzleException;
+use stdClass;
 
 class PersonTest extends ResourceTest
 {
@@ -119,14 +122,15 @@ class PersonTest extends ResourceTest
 
     /**
      * @param array $addressData
-     * @return \stdClass
+     * @return stdClass
      * @throws BimerApiException
      * @throws BimerParameterException
      * @throws BimerRequestException
+     * @throws GuzzleException
      */
-    private function createCustomer(array $addressData): \stdClass
+    private function createCustomer(array $addressData): stdClass
     {
-        return \Bimer\Customer::create([
+        return Customer::create([
             'Nome' => 'Customer #' . rand(),
             'CpfCnpj' => GeneratorHelper::cpfRandom(false),
             'Enderecos' => [

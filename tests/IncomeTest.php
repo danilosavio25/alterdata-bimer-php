@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bimer\Test;
 
 use Bimer\Income;
+use Random\RandomException;
 
 class IncomeTest extends ResourceTest
 {
@@ -49,6 +50,7 @@ class IncomeTest extends ResourceTest
 
     /**
      * Data provider for Income Data
+     * @throws RandomException
      */
     public function incomeData(): array
     {
@@ -66,6 +68,7 @@ class IncomeTest extends ResourceTest
 
     /**
      * Data provider for Batch Data
+     * @throws RandomException
      */
     public function batchData(): array
     {

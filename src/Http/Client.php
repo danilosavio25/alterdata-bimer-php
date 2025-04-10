@@ -11,7 +11,7 @@ class Client extends Guzzle
     /**
      * @var string|null
      */
-    protected $fullUrl;
+    protected ?string $fullUrl = "";
 
     /**
      * @throws BimerParameterException
@@ -20,19 +20,21 @@ class Client extends Guzzle
     {
         $sdkVersion = Bimer::getSdkVersion();
         $host = $_SERVER['HTTP_HOST'] ?? '';
-        $url = &$this->fullUrl;
+        $url = $this->fullUrl;
 
         $config = array_merge([
             'base_uri' => Bimer::getApiUrl(),
             'timeout' => Bimer::getTimeout(),
-            'on_stats' => function (TransferStats $stats) use (&$url) {
+            'on_stats' => function (TransferStats $stats) use ($url) {
                 $url = $stats->getEffectiveUri();
             },
             'headers' => [
                 'Content-Type' => 'application/json',
-                'User-Agent' => "Alterdata-Bimer-PHP/{$sdkVersion};{$host}"
+                'User-Agent' => "Alterdata-Bimer-PHP/$sdkVersion;$host"
             ]
         ], $config);
+
+        echo $config['base_uri'];
 
         parent::__construct($config);
     }
@@ -56,7 +58,7 @@ class Client extends Guzzle
     /**
      * @param string|null $token
      */
-    public function setToken(string $token = null)
+    public function setToken(string $token = null): void
     {
         Bimer::setToken($token);
     }

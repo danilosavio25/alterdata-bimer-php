@@ -6,6 +6,7 @@ use Bimer\Exceptions\BimerApiException;
 use Bimer\Exceptions\BimerParameterException;
 use Bimer\Exceptions\BimerRequestException;
 use Bimer\Http\Resource;
+use GuzzleHttp\Exception\GuzzleException;
 
 class Income extends Resource
 {
@@ -19,12 +20,13 @@ class Income extends Resource
 
     /**
      * @param array $params
-     * @return \stdClass
+     * @return mixed
      * @throws BimerApiException
-     * @throws BimerRequestException
      * @throws BimerParameterException
+     * @throws BimerRequestException
+     * @throws GuzzleException
      */
-    public static function makeBatch(array $params)
+    public static function makeBatch(array $params): mixed
     {
         return static::create($params, "lote/baixas");
     }

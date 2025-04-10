@@ -21,8 +21,8 @@ class Validator
     const POSTAL_CODE_LENGTH = 8;
 
     /**
-     * @param string|int|null $value
-     * @return string|null
+     * @param null $value
+     * @return string
      */
     public static function unmask($value = null): string
     {
@@ -30,10 +30,10 @@ class Validator
     }
 
     /**
-     * @param string|int|null $cnpj
+     * @param int|string|null $cnpj
      * @return bool
      */
-    public static function validateCnpj($cnpj): bool
+    public static function validateCnpj(int|string|null $cnpj): bool
     {
         $cnpj = self::unmask($cnpj);
 
@@ -65,10 +65,10 @@ class Validator
     }
 
     /**
-     * @param string|int|null $cpf
+     * @param int|string|null $cpf
      * @return bool
      */
-    public static function validateCpf($cpf): bool
+    public static function validateCpf(int|string|null $cpf): bool
     {
         $cpf = self::unmask($cpf);
 
@@ -105,19 +105,19 @@ class Validator
     }
 
     /**
-     * @param string|int|null $value
+     * @param int|string|null $value
      * @return bool
      */
-    public static function validateCpfCnpj($value): bool
+    public static function validateCpfCnpj(int|string|null $value): bool
     {
         return self::validateCpf($value) || self::validateCnpj($value);
     }
 
     /**
-     * @param string|int|null $value
+     * @param int|string|null $value
      * @return bool
      */
-    public static function validatePostalCode($value): bool
+    public static function validatePostalCode(int|string|null $value): bool
     {
         $value = Sanitizer::cleanNumeric($value);
         return strlen($value) === self::POSTAL_CODE_LENGTH;

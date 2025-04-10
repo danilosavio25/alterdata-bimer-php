@@ -86,7 +86,7 @@ class GeneratorHelper
      * @param int $divisor
      * @return float
      */
-    private static function mod(int $dividendo, int $divisor)
+    private static function mod(int $dividendo, int $divisor): float
     {
         return round($dividendo - (floor($dividendo / $divisor) * $divisor));
     }

@@ -2,10 +2,11 @@
 
 namespace Bimer;
 
+use Bimer\Exceptions\BimerApiException;
 use Bimer\Exceptions\BimerParameterException;
 use Bimer\Exceptions\BimerRequestException;
 use Bimer\Http\Resource;
-use Bimer\Exceptions\BimerApiException;
+use GuzzleHttp\Exception\GuzzleException;
 
 class AreaType extends Resource
 {
@@ -24,8 +25,9 @@ class AreaType extends Resource
      * @throws BimerApiException
      * @throws BimerRequestException
      * @throws BimerParameterException
+     * @throws GuzzleException
      */
-    public static function getByDescription(string $description, bool $anyPart = true)
+    public static function getByDescription(string $description, bool $anyPart = true): array
     {
         if (strlen($description) < 1) {
             throw new BimerApiException('The parameter "description" is required');
