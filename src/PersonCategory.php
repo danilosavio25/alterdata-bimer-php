@@ -26,16 +26,15 @@ class PersonCategory extends Resource
 
     /**
      * @param array $params
-     * @param string $endpoint
-     * @return array
+     * @return mixed
      * @throws BimerApiException
      * @throws BimerParameterException
      * @throws BimerRequestException
      * @throws GuzzleException
      */
-    public static function create(array $params, string $endpoint = ''): array
+    public static function bindCategoryToPerson(array $params): mixed
     {
-        return parent::create($params, '/vincularCategoria');
+        return parent::create($params, 'vincularCategoria');
     }
 
     /**
@@ -44,20 +43,9 @@ class PersonCategory extends Resource
      * @throws BimerRequestException
      * @throws GuzzleException
      */
-    public static function updateCategory(string $personId, string $categoryId, array $params)
+    public static function updatePersonCategory(string $personId, string $categoryId, array $params): mixed
     {
         return parent::update(self::customEndpoint($personId, $categoryId), $params);
-    }
-
-    /**
-     * @throws BimerParameterException
-     * @throws BimerApiException
-     * @throws GuzzleException
-     * @throws BimerRequestException
-     */
-    public static function enableOrDisable(string $personId, string $categoryId, array $params)
-    {
-        return parent::patch($params, self::customEndpoint($personId, $categoryId));
     }
 
 }

@@ -34,8 +34,6 @@ class Client extends Guzzle
             ]
         ], $config);
 
-        echo $config['base_uri'];
-
         parent::__construct($config);
     }
 

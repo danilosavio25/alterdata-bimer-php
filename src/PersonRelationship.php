@@ -30,7 +30,7 @@ class PersonRelationship extends Resource
      * @throws BimerRequestException
      * @throws GuzzleException
      */
-    public static function getByPersonId(string $id)
+    public static function getByPersonId(string $id): mixed
     {
         return static::get(self::customEndpoint($id));
     }
@@ -39,13 +39,13 @@ class PersonRelationship extends Resource
     /**
      * @param string $personId
      * @param array $params
-     * @return array
+     * @return mixed
      * @throws BimerApiException
      * @throws BimerParameterException
      * @throws BimerRequestException
      * @throws GuzzleException
      */
-    public static function createRelationship(string $personId, array $params): array
+    public static function createRelationship(string $personId, array $params): mixed
     {
         return parent::create($params, self::customEndpoint($personId));
     }
@@ -53,13 +53,13 @@ class PersonRelationship extends Resource
     /**
      * @param string $id
      * @param array $params
-     * @return array
+     * @return mixed
      * @throws BimerApiException
      * @throws BimerParameterException
      * @throws BimerRequestException
      * @throws GuzzleException
      */
-    public static function delete(string $id, array $params = []): array
+    public static function deleteRelationship(string $id, array $params = []): mixed
     {
         return parent::delete(self::customEndpoint($id), $params);
     }

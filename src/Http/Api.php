@@ -117,9 +117,6 @@ class Api
         }
 
         try {
-            echo '$endpoint';
-            echo $endpoint;
-            echo $method;
             $response = $this->client->request($method, $endpoint, $options);
         } catch (RequestException $e) {
             if (!$e->hasResponse()) {
@@ -272,7 +269,7 @@ class Api
      */
     public function delete(string $endpoint, array $options = []): mixed
     {
-        return $this->request('PUT', $endpoint, $options);
+        return $this->request('DELETE', $endpoint, $options);
     }
 
     /**

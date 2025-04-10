@@ -139,9 +139,11 @@ abstract class Resource
      * @throws BimerParameterException
      * @throws GuzzleException
      */
-    public static function delete(string $id, array $params = []): mixed
+    public static function delete(string $id, array $params = [], string $paramType = 'query'): mixed
     {
-        $data = static::api()->delete($id, ['json' => $params]);
+
+
+        $data = static::api()->delete($id, [$paramType => $params]);
 
         return static::normalizeData($data);
     }
@@ -161,23 +163,5 @@ abstract class Resource
         $item = reset($array) ? reset($array) : null;
 
         return $single ? $item : $array;
-    }
-
-    /**
-     * Create element
-     *
-     * @param array $params
-     * @param string $endpoint
-     * @return mixed
-     * @throws BimerApiException
-     * @throws BimerParameterException
-     * @throws BimerRequestException
-     * @throws GuzzleException
-     */
-    public static function patch(array $params, string $endpoint = ''): mixed
-    {
-        $data = static::api()->patch($endpoint, ['json' => $params]);
-
-        return static::normalizeData($data);
     }
 }

@@ -52,13 +52,11 @@ class PersonTest extends ResourceTest
         $this->assertObjectHasAttribute('Identificador', $customer);
     }
 
-    public function testGetEmptyCpfCnpj()
+    public function testGetEmptyCpfCnpjShouldReturnNotFoundException()
     {
         $randomCpf = GeneratorHelper::cpfRandom(false);
-        $response = $this->resource::getByCpfCnpj($randomCpf);
-
-        $this->assertIsArray($response);
-        $this->assertEmpty($response);
+        $this->expectException(BimerApiException::class);
+        $this->resource::getByCpfCnpj($randomCpf);
     }
 
     public function testGetSomeCpfCnpj()
@@ -96,10 +94,12 @@ class PersonTest extends ResourceTest
                     'NomeLogradouro' => $placeholder,
                     'Tipos' => [
                         'Principal' => true
-                    ]
+                    ],
+                    //'IdentificadorCidade' => '00A0000001',
                 ])
             ]
         ];
+
         $person = $this->resource::update($customer->Identificador, $data);
 
         $this->assertSame($person->Nome, $placeholder);
@@ -111,17 +111,16 @@ class PersonTest extends ResourceTest
      */
     public function addressData(): array
     {
-        $areaType = (array)json_decode(getenv('DATA_ADDRESS'));
+        $address = (array) json_decode(getenv('DATA_ADDRESS'));
 
         return [
             [
-                $areaType
+                $address
             ]
         ];
     }
 
     /**
-     * @param array $addressData
      * @return stdClass
      * @throws BimerApiException
      * @throws BimerParameterException
@@ -140,7 +139,8 @@ class PersonTest extends ResourceTest
                     'NomeLogradouro' => 'CREATE TEST',
                     'Tipos' => [
                         'Principal' => true
-                    ]
+                    ],
+                    'IdentificadorCidade' => '00A0000001',
                 ])
             ]
         ]);
