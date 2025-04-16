@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Bimer\Test;
 
 use Bimer\Income;
-use Random\RandomException;
+use Bimer\Test\DataServices\BatchData;
+use Bimer\Test\DataServices\IncomeData;
 
 class IncomeTest extends ResourceTest
 {
@@ -14,76 +15,37 @@ class IncomeTest extends ResourceTest
         $this->resource = Income::class;
     }
 
-    /**
-     * @dataProvider incomeData
-     */
-    public function testCreateIncome(array $incomeData)
+    public function testCreateIncome()
     {
+        $incomeData = IncomeData::get();
+
         $incomeId = Income::create($incomeData);
 
         $this->assertNotEmpty($incomeId);
     }
 
-    /**
-     * @dataProvider incomeData
-     */
-    public function testGetIncomeById(array $incomeData)
+    public function testGetIncomeById()
     {
+        $incomeData = IncomeData::get();
+
         $incomeId = Income::create($incomeData);
+
         $income = $this->resource::find($incomeId);
 
-        $this->assertObjectHasAttribute('Identificador', $income);
+        $this->assertObjectHasProperty('Identificador', $income);
     }
 
-    /**
-     * @dataProvider batchData
-     */
-    public function testMakeIncomeBatch(array $incomeData, array $batchData)
+    public function testMakeIncomeBatch()
     {
+        $incomeData = IncomeData::get();
+
         $incomeId = Income::create($incomeData);
+
+        $batchData = BatchData::get();
 
         $batchData["LoteAReceberItemBaixa"][0]->IdentificadorTituloAReceber = $incomeId;
         $batch = Income::makeBatch($batchData);
 
-        $this->assertObjectHasAttribute('IdentificadorLoteAReceber', $batch);
-    }
-
-    /**
-     * Data provider for Income Data
-     * @throws RandomException
-     */
-    public function incomeData(): array
-    {
-        $incomeData = array_merge((array)json_decode(getenv('DATA_INCOME')), [
-            "NumeroTitulo" => random_int(10000, 999999),
-            "ValorTitulo" => 100
-        ]);
-
-        return [
-            [
-                $incomeData
-            ]
-        ];
-    }
-
-    /**
-     * Data provider for Batch Data
-     * @throws RandomException
-     */
-    public function batchData(): array
-    {
-        $incomeData = array_merge((array)json_decode(getenv('DATA_INCOME')), [
-            "NumeroTitulo" => random_int(10000, 999999),
-            "ValorTitulo" => 100
-        ]);
-
-        $batchData = (array)json_decode(getenv('DATA_INCOME_BATCH'));
-
-        return [
-            [
-                $incomeData,
-                $batchData
-            ]
-        ];
+        $this->assertObjectHasProperty('IdentificadorLoteAReceber', $batch);
     }
 }

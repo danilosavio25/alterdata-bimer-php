@@ -8,13 +8,13 @@
     "homepage": "https://github.com/vitorccs/alterdata-bimer-php",
     "license": "GPL-3.0",
     "require": {
-        "php": ">=7.3.0",
+        "php": ">=8.3",
         "guzzlehttp/guzzle": "^6.3.1|^7.0.1",
         "ext-json": "*"
     },
     "require-dev": {
         "php": ">=8.3",
-        "phpunit/phpunit": "^8.5"
+        "phpunit/phpunit": "^12.1"
     },
     "authors": [
         {

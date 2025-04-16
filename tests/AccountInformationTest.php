@@ -4,44 +4,32 @@ declare(strict_types=1);
 namespace Bimer\Test;
 
 use Bimer\AccountInformation;
+use Bimer\Test\DataServices\AccountData;
 
 class AccountInformationTest extends ResourceTest
 {
+    /**
+     */
     public function setUp(): void
     {
         $this->resource = AccountInformation::class;
     }
 
-    /**
-     * @dataProvider accountData
-     */
-    public function testGetByDescription(array $accountData)
+    public function testGetByDescription()
     {
+        $accountData = AccountData::get();
+
         $response = $this->resource::getByDescription($accountData['description']);
 
         $this->assertGreaterThan(0, count($response));
     }
 
-    /**
-     * @dataProvider accountData
-     */
-    public function testGetById(array $accountData)
+    public function testGetById()
     {
+        $accountData = AccountData::get();
+
         $accountInformation = $this->resource::find($accountData['id']);
-        $this->assertObjectHasAttribute('Identificador', $accountInformation);
-    }
 
-    /**
-     * Data provider for Account Data
-     */
-    public function accountData(): array
-    {
-        $accountData = (array)json_decode(getenv('DATA_ACCOUNT'));
-
-        return [
-            [
-                $accountData
-            ]
-        ];
+        $this->assertObjectHasProperty('Identificador', $accountInformation);
     }
 }

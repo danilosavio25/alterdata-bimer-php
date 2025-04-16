@@ -8,6 +8,7 @@ use Bimer\Exceptions\BimerApiException;
 use Bimer\Exceptions\BimerParameterException;
 use Bimer\Exceptions\BimerRequestException;
 use Bimer\PersonRelationship;
+use Bimer\Test\DataServices\AddressData;
 use GuzzleHttp\Exception\GuzzleException;
 use stdClass;
 
@@ -20,11 +21,17 @@ class PersonRelationshipTest extends ResourceTest
     protected string $mainPersonCategoryId = '0000000005';
     protected string $relationshipPersonCategoryId = '0000000005';
 
+    /**
+     * @throws BimerParameterException
+     * @throws BimerApiException
+     * @throws GuzzleException
+     * @throws BimerRequestException
+     */
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
-        self::$mainPerson = self::createCustomer(self::addressData());
-        self::$relationshipPerson = self::createCustomer(self::addressData());
+        self::$mainPerson = self::createCustomer();
+        self::$relationshipPerson = self::createCustomer();
     }
 
     public function setUp(): void
@@ -44,7 +51,7 @@ class PersonRelationshipTest extends ResourceTest
                 "PessoaRelacionadaPrincipal" => false
             ]);
 
-        $this->assertObjectHasAttribute('IdentificadorCategoriaPessoaPrincipal', $relationship);
+        $this->assertObjectHasProperty('IdentificadorCategoriaPessoaPrincipal', $relationship);
     }
 
     public function testGetByPersonId()
@@ -75,28 +82,16 @@ class PersonRelationshipTest extends ResourceTest
     }
 
     /**
-     * Data provider for Address Data
-     */
-    private static function addressData(): array
-    {
-        $areaType = (array)json_decode(getenv('DATA_ADDRESS'));
-
-        return [
-            [
-                $areaType
-            ]
-        ];
-    }
-
-    /**
      * @return stdClass
      * @throws BimerApiException
      * @throws BimerParameterException
      * @throws BimerRequestException
      * @throws GuzzleException
      */
-    private static function createCustomer(array $addressData): \stdClass
+    private static function createCustomer(): stdClass
     {
+        $addressData = AddressData::get();
+
         return Customer::create([
             'Nome' => 'Customer #' . rand(),
             'CpfCnpj' => GeneratorHelper::cpfRandom(false),

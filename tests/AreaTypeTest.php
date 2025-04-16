@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Bimer\Test;
 
 use Bimer\AreaType;
+use Bimer\Test\DataServices\AreaTypeData;
 
 class AreaTypeTest extends ResourceTest
 {
@@ -12,37 +13,21 @@ class AreaTypeTest extends ResourceTest
         $this->resource = AreaType::class;
     }
 
-    /**
-     * @dataProvider areaTypeData
-     */
-    public function testGetByDescription(array $areaType)
+    public function testGetByDescription()
     {
+        $areaType = AreaTypeData::get();
+
         $response = $this->resource::getByDescription($areaType['description']);
 
         $this->assertGreaterThan(0, count($response));
     }
 
-    /**
-     * @dataProvider areaTypeData
-     */
-    public function testGetById(array $areaType)
+    public function testGetById()
     {
+        $areaType = AreaTypeData::get();
+
         $accountInformation = $this->resource::find($areaType['id']);
 
-        $this->assertObjectHasAttribute('Identificador', $accountInformation);
-    }
-
-    /**
-     * Data provider for Area Type Data
-     */
-    public function areaTypeData(): array
-    {
-        $areaType = (array)json_decode(getenv('DATA_AREA_TYPE'));
-
-        return [
-            [
-                $areaType
-            ]
-        ];
+        $this->assertObjectHasProperty('Identificador', $accountInformation);
     }
 }

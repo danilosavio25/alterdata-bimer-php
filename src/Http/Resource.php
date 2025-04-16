@@ -133,16 +133,15 @@ abstract class Resource
      *
      * @param string $id
      * @param array $params
+     * @param string $paramType
      * @return mixed
      * @throws BimerApiException
-     * @throws BimerRequestException
      * @throws BimerParameterException
+     * @throws BimerRequestException
      * @throws GuzzleException
      */
     public static function delete(string $id, array $params = [], string $paramType = 'query'): mixed
     {
-
-
         $data = static::api()->delete($id, [$paramType => $params]);
 
         return static::normalizeData($data);

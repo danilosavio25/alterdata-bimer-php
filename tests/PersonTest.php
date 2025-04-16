@@ -8,6 +8,8 @@ use Bimer\Exceptions\BimerApiException;
 use Bimer\Exceptions\BimerParameterException;
 use Bimer\Exceptions\BimerRequestException;
 use Bimer\Person;
+use Bimer\Test\DataServices\AddressData;
+use Bimer\Test\DataServices\PersonData;
 use GuzzleHttp\Exception\GuzzleException;
 use stdClass;
 
@@ -16,8 +18,6 @@ class PersonTest extends ResourceTest
     public function setUp(): void
     {
         $this->resource = Person::class;
-
-        $this->incomeData = (array)json_decode(getenv('DATA_PERSON'));
     }
 
     public function testValidateName()
@@ -43,46 +43,62 @@ class PersonTest extends ResourceTest
     }
 
     /**
-     * @dataProvider addressData
+     * @throws BimerParameterException
+     * @throws BimerApiException
+     * @throws GuzzleException
+     * @throws BimerRequestException
      */
-    public function testCreatePerson(array $addressData)
+    public function testCreatePerson()
     {
-        $customer = $this->createCustomer($addressData);
+        $customer = $this->createCustomer();
 
-        $this->assertObjectHasAttribute('Identificador', $customer);
+        $this->assertObjectHasProperty('Identificador', $customer);
     }
 
     public function testGetEmptyCpfCnpjShouldReturnNotFoundException()
     {
         $randomCpf = GeneratorHelper::cpfRandom(false);
+
         $this->expectException(BimerApiException::class);
+
         $this->resource::getByCpfCnpj($randomCpf);
     }
 
     public function testGetSomeCpfCnpj()
     {
-        $response = $this->resource::getByCpfCnpj($this->incomeData['cpfCnpj']);
+        $personData = PersonData::get();
+
+        $response = $this->resource::getByCpfCnpj($personData['cpfCnpj']);
 
         $this->assertIsArray($response);
         $this->assertNotEmpty($response);
     }
 
+
     /**
-     * @dataProvider addressData
+     * @throws BimerParameterException
+     * @throws BimerApiException
+     * @throws GuzzleException
+     * @throws BimerRequestException
      */
-    public function testGetById(array $addressData)
+    public function testGetById()
     {
-        $customer = $this->createCustomer($addressData);
+        $customer = $this->createCustomer();
         $person = $this->resource::find($customer->Identificador);
-        $this->assertObjectHasAttribute('Identificador', $person);
+        $this->assertObjectHasProperty('Identificador', $person);
     }
 
     /**
-     * @dataProvider addressData
+     * @throws BimerParameterException
+     * @throws BimerApiException
+     * @throws GuzzleException
+     * @throws BimerRequestException
      */
-    public function testChangePersonData(array $addressData)
+    public function testChangePersonData()
     {
-        $customer = $this->createCustomer($addressData);
+        $customer = $this->createCustomer();
+
+        $addressData = AddressData::get();
 
         $placeholder = 'CHANGE TEST';
         $data = [
@@ -95,7 +111,6 @@ class PersonTest extends ResourceTest
                     'Tipos' => [
                         'Principal' => true
                     ],
-                    //'IdentificadorCidade' => '00A0000001',
                 ])
             ]
         ];
@@ -107,28 +122,16 @@ class PersonTest extends ResourceTest
     }
 
     /**
-     * Data provider for Address Data
-     */
-    public function addressData(): array
-    {
-        $address = (array) json_decode(getenv('DATA_ADDRESS'));
-
-        return [
-            [
-                $address
-            ]
-        ];
-    }
-
-    /**
      * @return stdClass
      * @throws BimerApiException
      * @throws BimerParameterException
      * @throws BimerRequestException
      * @throws GuzzleException
      */
-    private function createCustomer(array $addressData): stdClass
+    private function createCustomer(): stdClass
     {
+        $addressData = AddressData::get();
+
         return Customer::create([
             'Nome' => 'Customer #' . rand(),
             'CpfCnpj' => GeneratorHelper::cpfRandom(false),

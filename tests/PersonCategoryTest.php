@@ -8,20 +8,26 @@ use Bimer\Exceptions\BimerApiException;
 use Bimer\Exceptions\BimerParameterException;
 use Bimer\Exceptions\BimerRequestException;
 use Bimer\PersonCategory;
+use Bimer\Test\DataServices\AddressData;
 use GuzzleHttp\Exception\GuzzleException;
 use stdClass;
 
 class PersonCategoryTest extends ResourceTest
 {
-
     protected static ?stdClass $person = null;
 
     protected string $categoryId = '0000000006';
 
+    /**
+     * @throws BimerParameterException
+     * @throws BimerApiException
+     * @throws GuzzleException
+     * @throws BimerRequestException
+     */
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
-        self::$person = self::createCustomer(self::addressData());
+        self::$person = self::createCustomer();
     }
 
     public function setUp(): void
@@ -37,7 +43,7 @@ class PersonCategoryTest extends ResourceTest
                 "IdentificadorCategoria" => $this->categoryId,
             ]);
 
-        $this->assertObjectHasAttribute('Identificador', $response);
+        $this->assertObjectHasProperty('Identificador', $response);
     }
 
 
@@ -52,7 +58,7 @@ class PersonCategoryTest extends ResourceTest
                 "CodigoChamadaExterno" => '01',
             ]);
 
-        $this->assertObjectHasAttribute('Identificador', $response);
+        $this->assertObjectHasProperty('Identificador', $response);
     }
 
     public function testDisablePersonCategory()
@@ -66,22 +72,9 @@ class PersonCategoryTest extends ResourceTest
                 "CodigoChamadaExterno" => '01',
             ]);
 
-        $this->assertObjectHasAttribute('Identificador', $response);
+        $this->assertObjectHasProperty('Identificador', $response);
     }
 
-    /**
-     * Data provider for Address Data
-     */
-    private static function addressData(): array
-    {
-        $areaType = (array)json_decode(getenv('DATA_ADDRESS'));
-
-        return [
-            [
-                $areaType
-            ]
-        ];
-    }
 
     /**
      * @return stdClass
@@ -90,8 +83,10 @@ class PersonCategoryTest extends ResourceTest
      * @throws BimerRequestException
      * @throws GuzzleException
      */
-    private static function createCustomer(array $addressData): \stdClass
+    private static function createCustomer(): stdClass
     {
+        $addressData = AddressData::get();
+
         return Customer::create([
             'Nome' => 'Customer #' . rand(),
             'CpfCnpj' => GeneratorHelper::cpfRandom(false),
