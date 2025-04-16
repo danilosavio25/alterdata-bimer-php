@@ -32,7 +32,7 @@ class PersonRelationship extends Resource
      */
     public static function getByPersonId(string $id): mixed
     {
-        return static::get(self::customEndpoint($id));
+        return static::all([], self::customEndpoint($id));
     }
 
 
