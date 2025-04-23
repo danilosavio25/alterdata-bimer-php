@@ -20,6 +20,10 @@
         {
             "name": "Vitor Siqueira",
             "email": "vitorccsiqueira@gmail.com"
+        },
+        {
+            "name": "Danilo Savio",
+            "email": "danilosavio25@gmail.com"
         }
     ],
     "autoload": {

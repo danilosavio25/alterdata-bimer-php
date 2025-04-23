@@ -4,7 +4,7 @@ SDK PHP para a API do Alterdata Bimer
 
 ## Descrição
 SDK em PHP para integração com os serviços de API do ERP Alterdata Bimer.
-Documentação da API Alterdata Bimer: https://bimersandbox.alterdata.com.br/#/.
+Documentação da API Alterdata Bimer: https://bimerapi.docs.apiary.io/#.
 
 
 ## Instalação
@@ -12,8 +12,6 @@ Via Composer
 ```bash
 composer require vitorccs/alterdata-bimer-php
 ```
-
-
 ## Métodos disponíveis
 All: Buscar objetos. Retorna array de objetos.
 ```php
@@ -51,14 +49,12 @@ Os seguintes parâmetros devem ser informados:
 * BIMER_API_PWD (Senha)
 * BIMER_API_TIMEOUT (Opcional, padrão 30. Timeout em segundos para estabelecer conexão com a API)
 
-
 ## Autenticação
 Não é necessário codificar a variável BIMER_API_PWD com MD5, a SDK fará isso automaticamente.
 
 Não é necessário autenticar manualmente, O SDK irá autenticar e obter um token automaticamente.
 
 Cada processo PHP possuirá o seu próprio token de autenticação, sendo reaproveitado até o término da execução do script PHP. Caso esteja executando o PHP sem timeout (ex: CLI), o token será trocado a cada 10 minutos. Desta forma, evitamos sobrecarga no servidor da API.
-
 
 ## Exemplo de implementação
 
@@ -121,9 +117,12 @@ try {
 ## Métodos implementados
 * CEP (PostalCode)
 * Cliente (Customer)
+* Categoria (Category)
 * NaturezaLancamento (AccountInformation)
 * Pessoa (Person)
+* PessoaCategoria (PersonCategory)
 * PessoaCaracteristica (PersonCharacteristic)
+* PessoaRelacionamento (PersonRelationship)
 * Titulos a Receber (Income)
 * TiposLogradouro (AreaType)
 
