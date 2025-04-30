@@ -9,6 +9,7 @@ use Bimer\Exceptions\BimerParameterException;
 use Bimer\Exceptions\BimerRequestException;
 use Bimer\Person;
 use Bimer\Test\DataServices\AddressData;
+use Bimer\Test\DataServices\CustomerData;
 use Bimer\Test\DataServices\PersonData;
 use GuzzleHttp\Exception\GuzzleException;
 use stdClass;
@@ -130,22 +131,6 @@ class PersonTest extends ResourceTest
      */
     private function createCustomer(): stdClass
     {
-        $addressData = AddressData::get();
-
-        return Customer::create([
-            'Nome' => 'Customer #' . rand(),
-            'CpfCnpj' => GeneratorHelper::cpfRandom(false),
-            'Enderecos' => [
-                array_merge($addressData, [
-                    'Codigo' => '01',
-                    'TipoCadastro' => 'I',
-                    'NomeLogradouro' => 'CREATE TEST',
-                    'Tipos' => [
-                        'Principal' => true
-                    ],
-                    'IdentificadorCidade' => '00A0000001',
-                ])
-            ]
-        ]);
+        return Customer::create(CustomerData::get());
     }
 }

@@ -8,7 +8,7 @@ use Bimer\Exceptions\BimerApiException;
 use Bimer\Exceptions\BimerParameterException;
 use Bimer\Exceptions\BimerRequestException;
 use Bimer\PersonRelationship;
-use Bimer\Test\DataServices\AddressData;
+use Bimer\Test\DataServices\CustomerData;
 use GuzzleHttp\Exception\GuzzleException;
 use stdClass;
 
@@ -30,8 +30,8 @@ class PersonRelationshipTest extends ResourceTest
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
-        self::$mainPerson = self::createCustomer();
-        self::$relationshipPerson = self::createCustomer();
+        self::$mainPerson = Customer::create(CustomerData::get());
+        self::$relationshipPerson = Customer::create(CustomerData::get());
     }
 
     public function setUp(): void
@@ -79,33 +79,6 @@ class PersonRelationshipTest extends ResourceTest
 
         $this->assertIsString($response);
         $this->assertStringContainsString('sucesso', strtolower($response));
-    }
-
-    /**
-     * @return stdClass
-     * @throws BimerApiException
-     * @throws BimerParameterException
-     * @throws BimerRequestException
-     * @throws GuzzleException
-     */
-    private static function createCustomer(): stdClass
-    {
-        $addressData = AddressData::get();
-
-        return Customer::create([
-            'Nome' => 'Customer #' . rand(),
-            'CpfCnpj' => GeneratorHelper::cpfRandom(false),
-            'Enderecos' => [
-                array_merge($addressData, [
-                    'Codigo' => '01',
-                    'TipoCadastro' => 'I',
-                    'NomeLogradouro' => 'CREATE TEST',
-                    'Tipos' => [
-                        'Principal' => true
-                    ]
-                ])
-            ]
-        ]);
     }
 
 }

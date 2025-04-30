@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="vendor/autoload.php"
          backupGlobals="false"
-         backupStaticAttributes="false"
          colors="true"
-         verbose="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
+         displayDetailsOnTestsThatTriggerDeprecations="true"
          processIsolation="false"
          stopOnFailure="false">
     <testsuites>
@@ -15,11 +11,6 @@
             <exclude>./tests/ResourceTest.php</exclude>
         </testsuite>
     </testsuites>
-    <filter>
-        <whitelist>
-            <directory suffix=".php">src/</directory>
-        </whitelist>
-    </filter>
     <php>
         <env name="BIMER_API_URL" value="api_url"/>
         <env name="BIMER_API_ID" value="client_id"/>
@@ -27,11 +18,12 @@
         <env name="BIMER_API_USER" value="username"/>
         <env name="BIMER_API_PWD" value="password"/>
         <env name="BIMER_API_TIMEOUT" value="30"/>
-        <env name="DATA_PERSON" value='{"cpfCnpj":"36.462.778/0001-60"}' />
-        <env name="DATA_INCOME" value='{"CodigoEmpresa":"1","IdentificadorPessoa":"00A0000001","IdentificadorFormaPagamento":"00A0000001","CodigoEnderecoCobranca":"01","IdentificadorNaturezaLancamento":"00A0000001"}' />
-        <env name="DATA_INCOME_BATCH" value='{"CodigoEmpresa":1,"LoteAReceberItemBaixa":[{"IdentificadorFormaPagamento":"00A0000001","IdentificadorTipoBaixa":"00A0000001","IdentificadorContaBancaria":"00A0000001"}]}' />
-        <env name="DATA_ACCOUNT" value='{"description":"teste","id":"00A0000001"}' />
-        <env name="DATA_AREA_TYPE" value='{"description":"RUA","id":"00A0000001"}' />
-        <env name="DATA_ADDRESS" value='{"CEP":"22060020","IdentificadorBairro":"00A0000001","IdentificadorCidade":"00A0000001","IdentificadorTipoLogradouro":"00A0000001","SiglaUnidadeFederativa":"SP"}'/>
+        <env name="DATA_PERSON" value='{"cpfCnpj":"36.462.778/0001-60", "Identificador": "00A00005XC"}' />
+        <env name="DATA_INCOME" value='{"CodigoEmpresa":"1","IdentificadorPessoa":"00A00005XC","IdentificadorFormaPagamento":"00A0000048","CodigoEnderecoCobranca":"01","IdentificadorNaturezaLancamento":"00A00000BS"}' />
+        <env name="DATA_INCOME_BATCH" value='{"CodigoEmpresa":1,"LoteAReceberItemBaixa":[{"IdentificadorFormaPagamento":"00A0000048","IdentificadorTipoBaixa":"00A0000001","IdentificadorContaBancaria":"00A000000B"}]}' />
+        <env name="DATA_ACCOUNT" value='{"description":"caixa","id":"00A0000005"}' />
+        <env name="DATA_CHARACTERISTIC" value='{"Identificador":"00A00000EL"}' />
+        <env name="DATA_AREA_TYPE" value='{"description":"RUA","id":"00A00000L0"}' />
+        <env name="DATA_ADDRESS" value='{"CEP":"03877100","IdentificadorBairro":"00A0000001","IdentificadorCidade":"00A0000001","IdentificadorTipoLogradouro":"00A00000L0","SiglaUnidadeFederativa":"SP"}'/>
     </php>
 </phpunit>

@@ -8,7 +8,7 @@ use Bimer\Exceptions\BimerApiException;
 use Bimer\Exceptions\BimerParameterException;
 use Bimer\Exceptions\BimerRequestException;
 use Bimer\PersonCategory;
-use Bimer\Test\DataServices\AddressData;
+use Bimer\Test\DataServices\CustomerData;
 use GuzzleHttp\Exception\GuzzleException;
 use stdClass;
 
@@ -85,22 +85,7 @@ class PersonCategoryTest extends ResourceTest
      */
     private static function createCustomer(): stdClass
     {
-        $addressData = AddressData::get();
-
-        return Customer::create([
-            'Nome' => 'Customer #' . rand(),
-            'CpfCnpj' => GeneratorHelper::cpfRandom(false),
-            'Enderecos' => [
-                array_merge($addressData, [
-                    'Codigo' => '01',
-                    'TipoCadastro' => 'I',
-                    'NomeLogradouro' => 'CREATE TEST',
-                    'Tipos' => [
-                        'Principal' => true
-                    ]
-                ])
-            ]
-        ]);
+        return Customer::create(CustomerData::get());
     }
 
 }

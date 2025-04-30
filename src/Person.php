@@ -70,4 +70,20 @@ class Person extends Resource
 
         return static::all($params);
     }
+
+    /**
+     * @param string $personId
+     * @param array $params
+     * @return mixed
+     * @throws BimerApiException
+     * @throws BimerParameterException
+     * @throws BimerRequestException
+     * @throws GuzzleException
+     */
+    public static function bindCharacteristic(string $personId, string $characteristicId): mixed
+    {
+        return parent::create([
+            'identificadorCaracteristica' => $characteristicId,
+        ], "$personId/caracteristicas");
+    }
 }
